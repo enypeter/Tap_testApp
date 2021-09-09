@@ -106,7 +106,7 @@ class _BioPageState extends State<BioPage> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(22.0),
+              padding: const EdgeInsets.fromLTRB(22,0,22,22),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
