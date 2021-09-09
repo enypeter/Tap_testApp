@@ -110,7 +110,6 @@ class _BioPageState extends State<BioPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
                   Text(
                     '${profileDetail['name']}, ${profileDetail['age']}',
                     style: headerStyle(),
@@ -185,26 +184,31 @@ class _BioPageState extends State<BioPage> {
             Flexible(
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/images/Image 96.png',
-                    width: size.width,
-                    fit: BoxFit.fitWidth,
-                  ),
+
                   SizedBox(height: 20),
-                  Container(
-                    height: 500,
-                    child: profileDetail == null
-                        ? Container()
-                        : StaggeredGridView.countBuilder(
-                            crossAxisCount: 2,
-                            itemCount: profileDetail['interests'].length,
-                            itemBuilder: (BuildContext context, int index) {
-                              var item = profileDetail['interests'][index];
-                              return circleContainer(item['name']);
-                            },
-                            staggeredTileBuilder: (int index) =>
-                                new StaggeredTile.fit(1),
-                          ),
+                  Stack(
+                    children: [
+                      Container(
+                        height: 500,
+                        child: profileDetail == null
+                            ? Container()
+                            : StaggeredGridView.countBuilder(
+                                crossAxisCount: 2,
+                                itemCount: profileDetail['interests'].length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var item = profileDetail['interests'][index];
+                                  return circleContainer(item['name']);
+                                },
+                                staggeredTileBuilder: (int index) =>
+                                    new StaggeredTile.fit(1),
+                              ),
+                      ),
+                      Image.asset(
+                        'assets/images/Image 96.png',
+                        width: size.width,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ],
                   ),
                   SizedBox(height: 20),
                   Padding(

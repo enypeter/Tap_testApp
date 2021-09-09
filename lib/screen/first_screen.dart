@@ -69,7 +69,7 @@ var categoriesList = [];
                   child: categoriesList.isEmpty
                       ? Center(child: CircularProgressIndicator(color: WHITE))
                       : StaggeredGridView.countBuilder(
-                          crossAxisCount: 4,
+                          crossAxisCount: 6,
                           itemCount: categoriesList.length,
                           itemBuilder: (BuildContext context, int index) {
                             var item = categoriesList[index];

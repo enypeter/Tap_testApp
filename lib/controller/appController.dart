@@ -7,7 +7,7 @@ var bioListItem;
 var interestListItem = [];
 
   getBio() async {
-    // if (bioListItem.isNotEmpty) {
+    if (bioListItem==null) {
       var response = await ApiDocs.getMyProfile();
       if (response['status'] != 'success') {
         print('failed');
@@ -17,12 +17,12 @@ var interestListItem = [];
         print(profileData);
         bioListItem = profileData;
       }
-    // }
+    }
     return bioListItem;
   }
 
   getInterests() async {
-    if (interestListItem.isNotEmpty) {
+    if (interestListItem.isEmpty) {
       var response = await ApiDocs.getCategories();
       if (response['status'] != 'success') {
         print('failed');
