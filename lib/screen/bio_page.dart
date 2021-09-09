@@ -22,7 +22,7 @@ class _BioPageState extends State<BioPage> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
-  var profileDetail = [];
+  var profileDetail;
   AppController bioController = Get.put(AppController());
 
   @override
@@ -34,73 +34,76 @@ class _BioPageState extends State<BioPage> {
   boot() async {
     var data = await bioController.getBio();
     setState(() {
-      profileDetail = data;
+      profileDetail = data['profile'];
+      print(profileDetail);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Background(
-      child: SingleChildScrollView(
+      child:profileDetail==null
+          ? Center(
+          child: CircularProgressIndicator(
+            color: WHITE,
+          ))
+          : SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Stack(
               children: [
-                profileDetail.isEmpty
+                profileDetail==null
                     ? Center(
-                    child: CircularProgressIndicator(
-                      color: WHITE,
-                    ))
+                        child: CircularProgressIndicator(
+                        color: WHITE,
+                      ))
                     : CarouselSlider.builder(
-                  carouselController: _controller,
-                  itemCount: profileDetail['photos'].length,
-                  options: CarouselOptions(
-                    viewportFraction: 1,
-                    autoPlay: false,
-                    aspectRatio: 0.7,
-                    enlargeCenterPage: true,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _current = index;
-                      });
-                    },
-                  ),
-                  itemBuilder: (context, index, realIdx) {
-                    var item = profileDetail['photos'];
-                    return Stack(
-                      children: [
-                        Image.network(item['filename'],
-                            fit: BoxFit.fitWidth,
-                            height: size.height * 0.6,
-                            width: double.infinity),
-                        Positioned(
-                          bottom: 20,
-                          right: 20,
-                          left: 20,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: profileDetail
-                                .asMap()
-                                .entries
-                                .map((entry) {
-                              return GestureDetector(
-                                onTap: () =>
-                                    _controller.animateToPage(entry.key),
-                                child: slideDot(
-                                    _current == entry.key ? 1.0 : 0.3),
-                              );
-                            }).toList(),
-                          ),
+                        carouselController: _controller,
+                        itemCount: profileDetail['photos'].length,
+                        options: CarouselOptions(
+                          viewportFraction: 1,
+                          autoPlay: false,
+                          aspectRatio: 0.7,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
                         ),
-                      ]
-                      ,
-                    );
-                  },
-                ),
+                        itemBuilder: (context, index, realIdx) {
+                          var item = profileDetail['photos'][index];
+                          return Stack(
+                            children: [
+                              Image.network(item['filename'],
+                                  fit: BoxFit.fitWidth,
+                                  height: size.height * 0.6,
+                                  width: double.infinity),
+                              // Positioned(
+                              //   bottom: 20,
+                              //   right: 20,
+                              //   left: 20,
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.center,
+                              //     children: profileDetail[index]
+                              //         .asMap()
+                              //         .entries
+                              //         .map((entry) {
+                              //       return GestureDetector(
+                              //         onTap: () =>
+                              //             _controller.animateToPage(entry.key),
+                              //         child: slideDot(
+                              //             _current == entry.key ? 1.0 : 0.3),
+                              //       );
+                              //     }).toList(),
+                              //   ),
+                              // ),
+                            ],
+                          );
+                        },
+                      ),
                 Positioned(
                   right: 10,
                   bottom: size.height * 0.12,
@@ -145,8 +148,7 @@ class _BioPageState extends State<BioPage> {
                     ),
                     child: Column(
                       children: [
-                        profileItem(
-                            title: 'Name', desc: '${profileDetail[]}'),
+                        profileItem(title: 'Name', desc: '${profileDetail['name']}'),
                         profileItem(
                             title: 'Gender',
                             desc: '${profileDetail['gender']}'),
@@ -176,17 +178,16 @@ class _BioPageState extends State<BioPage> {
                           child: profileDetail == null
                               ? Center(child: Container())
                               : ListView.builder(
-                              padding: EdgeInsets.all(0),
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: profileDetail[0].basicInfo.length,
-                              itemBuilder: (context, index) {
-                                var item =
-                                profileDetail[0].basicInfo[index];
-                                return profileItem(
-                                    title: '${item.key.name}',
-                                    desc: '${item.value}');
-                              }),
+                                  padding: EdgeInsets.all(0),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: profileDetail['basic_info'].length,
+                                  itemBuilder: (context, index) {
+                                    var item = profileDetail['basic_info'][index];
+                                    return profileItem(
+                                        title: '${item['key']['name']}',
+                                        desc: '${item['value']}');
+                                  }),
                         ),
                       ],
                     ),
@@ -208,19 +209,20 @@ class _BioPageState extends State<BioPage> {
                     fit: BoxFit.fitWidth,
                   ),
                   SizedBox(height: 20),
-                  Container(height: 500,
+                  Container(
+                    height: 500,
                     child: profileDetail == null
                         ? Container()
                         : StaggeredGridView.countBuilder(
-                      crossAxisCount: 2,
-                      itemCount: profileDetail[0].interests.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var item = profileDetail[0].interests[index];
-                        return circleContainer(item.name);
-                      },
-                      staggeredTileBuilder: (int index) =>
-                      new StaggeredTile.fit(1),
-                    ),
+                            crossAxisCount: 2,
+                            itemCount: profileDetail['interests'].length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var item = profileDetail['interests'][index];
+                              return circleContainer(item['name']);
+                            },
+                            staggeredTileBuilder: (int index) =>
+                                new StaggeredTile.fit(1),
+                          ),
                   ),
                   SizedBox(height: 20),
                   Padding(

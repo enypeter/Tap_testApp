@@ -3,7 +3,7 @@ import 'package:tap_design/model/bio_model.dart';
 import 'package:tap_design/service/api_services.dart';
 
 class AppController extends GetxController {
-var bioListItem = [];
+var bioListItem;
 var interestListItem = [];
 
   getBio() async {
@@ -13,7 +13,8 @@ var interestListItem = [];
         print('failed');
         bioListItem = [];
       } else {
-        var profileData = response['data']['profile'];
+        var profileData = response['data'];
+        print(profileData);
         bioListItem = profileData;
       }
     // }
