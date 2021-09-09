@@ -22,14 +22,9 @@ class _BioPageState extends State<BioPage> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
-  List<BioModel> profileDetail = [];
+  var profileDetail = [];
   AppController bioController = Get.put(AppController());
-String name='';
-String age='';
-String gender='';
-String bio='';
-List inst=[];
-var location;
+
   @override
   void initState() {
     boot();
@@ -40,11 +35,6 @@ var location;
     var data = await bioController.getBio();
     setState(() {
       profileDetail = data;
-      name = profileDetail[0].name;
-      age = profileDetail[0].age.toString();
-      gender = profileDetail[0].gender;
-      bio = profileDetail[0].bio;
-      location = profileDetail[0].location.coordinates;
     });
   }
 
@@ -67,7 +57,7 @@ var location;
                     ))
                     : CarouselSlider.builder(
                   carouselController: _controller,
-                  itemCount: profileDetail[0].photos.length,
+                  itemCount: profileDetail['photos'].length,
                   options: CarouselOptions(
                     viewportFraction: 1,
                     autoPlay: false,
@@ -80,31 +70,34 @@ var location;
                     },
                   ),
                   itemBuilder: (context, index, realIdx) {
-                    var item = profileDetail[0].photos;
+                    var item = profileDetail['photos'];
                     return Stack(
-                    children: [
-                    Image.network(item[0].filename,
-                    fit: BoxFit.fitWidth,
-                    height: size.height * 0.6,
-                    width: double.infinity),
-                    Positioned(
-                    bottom: 20,
-                    right: 20,
-                    left: 20,
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: profileDetail.asMap().entries.map((entry) {
-                    return GestureDetector(
-                    onTap: () =>
-                    _controller.animateToPage(entry.key),
-                    child: slideDot(
-                    _current == entry.key ? 1.0 : 0.3),
-                    );
-                    }).toList(),
-                    ),
-                    ),
-                    ]
-                    ,
+                      children: [
+                        Image.network(item['filename'],
+                            fit: BoxFit.fitWidth,
+                            height: size.height * 0.6,
+                            width: double.infinity),
+                        Positioned(
+                          bottom: 20,
+                          right: 20,
+                          left: 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: profileDetail
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              return GestureDetector(
+                                onTap: () =>
+                                    _controller.animateToPage(entry.key),
+                                child: slideDot(
+                                    _current == entry.key ? 1.0 : 0.3),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ]
+                      ,
                     );
                   },
                 ),
@@ -134,11 +127,11 @@ var location;
                 children: [
                   SizedBox(height: 20),
                   Text(
-                    '$name, $age',
+                    '${profileDetail['name']}, ${profileDetail['age']}',
                     style: headerStyle(),
                   ),
                   SizedBox(height: 15),
-                  text('$bio', WHITE),
+                  text('${profileDetail['bio']}', WHITE),
                   SizedBox(height: 20),
                   Text(
                     'Basic info',
@@ -153,15 +146,15 @@ var location;
                     child: Column(
                       children: [
                         profileItem(
-                            title: 'Name', desc: '$name'),
+                            title: 'Name', desc: '${profileDetail[]}'),
                         profileItem(
                             title: 'Gender',
-                            desc: '$gender'),
+                            desc: '${profileDetail['gender']}'),
                         profileItem(
-                            title: 'Age', desc: '$age'),
+                            title: 'Age', desc: '${profileDetail['age']}'),
                         profileItem(
                             title: 'Location',
-                            desc: '$location'),
+                            desc: '${profileDetail['gender']}'),
                       ],
                     ),
                   ),
@@ -180,7 +173,7 @@ var location;
                       children: [
                         Container(
                           height: 660,
-                          child: profileDetail.isEmpty
+                          child: profileDetail == null
                               ? Center(child: Container())
                               : ListView.builder(
                               padding: EdgeInsets.all(0),
@@ -216,7 +209,7 @@ var location;
                   ),
                   SizedBox(height: 20),
                   Container(height: 500,
-                    child: profileDetail.isEmpty
+                    child: profileDetail == null
                         ? Container()
                         : StaggeredGridView.countBuilder(
                       crossAxisCount: 2,

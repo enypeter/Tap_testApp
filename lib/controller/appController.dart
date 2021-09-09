@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
 import 'package:tap_design/model/bio_model.dart';
-import 'package:tap_design/model/category_model.dart';
 import 'package:tap_design/service/api_services.dart';
 
 class AppController extends GetxController {
-  List<BioModel> bioListItem = [];
-  List<CategoryModel> interestListItem = [];
+var bioListItem = [];
+var interestListItem = [];
 
   getBio() async {
     // if (bioListItem.isNotEmpty) {
@@ -15,25 +14,23 @@ class AppController extends GetxController {
         bioListItem = [];
       } else {
         var profileData = response['data']['profile'];
-        bioListItem = profileData
-            .map<BioModel>((json) => BioModel.fromJson(json))
-            .toList();
+        bioListItem = profileData;
       }
     // }
     return bioListItem;
   }
 
   getInterests() async {
-    // if (interestListItem.isNotEmpty) {
+    if (interestListItem.isNotEmpty) {
       var response = await ApiDocs.getCategories();
       if (response['status'] != 'success') {
         print('failed');
         interestListItem = [];
       } else {
-        var categoryData = response['data'];
+        var categoryData = response['data']['interests'];
         interestListItem = categoryData;
       }
-    // }
+    }
     return interestListItem;
   }
 }
