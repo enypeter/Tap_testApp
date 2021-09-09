@@ -81,25 +81,7 @@ class _BioPageState extends State<BioPage> {
                                   fit: BoxFit.fitWidth,
                                   height: size.height * 0.6,
                                   width: double.infinity),
-                              // Positioned(
-                              //   bottom: 20,
-                              //   right: 20,
-                              //   left: 20,
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.center,
-                              //     children: profileDetail[index]
-                              //         .asMap()
-                              //         .entries
-                              //         .map((entry) {
-                              //       return GestureDetector(
-                              //         onTap: () =>
-                              //             _controller.animateToPage(entry.key),
-                              //         child: slideDot(
-                              //             _current == entry.key ? 1.0 : 0.3),
-                              //       );
-                              //     }).toList(),
-                              //   ),
-                              // ),
+
                             ],
                           );
                         },
