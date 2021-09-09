@@ -8,7 +8,7 @@ class AppController extends GetxController {
   List<CategoryModel> interestListItem = [];
 
   getBio() async {
-    if (bioListItem.isNotEmpty) {
+    // if (bioListItem.isNotEmpty) {
       var response = await ApiDocs.getMyProfile();
       if (response['status'] != 'success') {
         print('failed');
@@ -19,23 +19,21 @@ class AppController extends GetxController {
             .map<BioModel>((json) => BioModel.fromJson(json))
             .toList();
       }
-    }
+    // }
     return bioListItem;
   }
 
   getInterests() async {
-    if (interestListItem.isNotEmpty) {
+    // if (interestListItem.isNotEmpty) {
       var response = await ApiDocs.getCategories();
       if (response['status'] != 'success') {
         print('failed');
         interestListItem = [];
       } else {
-        var categoryData = response['data']['interests'];
-        interestListItem = categoryData
-            .map<CategoryModel>((json) => CategoryModel.fromJson(json))
-            .toList();
+        var categoryData = response['data'];
+        interestListItem = categoryData;
       }
-    }
+    // }
     return interestListItem;
   }
 }

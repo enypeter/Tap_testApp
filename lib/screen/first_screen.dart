@@ -19,7 +19,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<CategoryModel> categoriesList = [];
+var categoriesList = [];
   AppController interestController = Get.put(AppController());
 
   @override
@@ -79,10 +79,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Stack(
                                     children: [
                                       Image.network(
-                                        '$ImageBaseUrl${item.image}',
+                                        '$ImageBaseUrl${item['image']}',
                                         fit: BoxFit.contain,
                                       ),
-                                      Text('${item.name}'),
+                                      Text('${item['name']}'),
                                     ],
                                   ),
                                 ],
